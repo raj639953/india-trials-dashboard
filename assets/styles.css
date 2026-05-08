@@ -351,8 +351,8 @@ textarea {
 }
 
 select option {
-  background: var(--ink);
-  color: #fff;
+  background-color: #0b0d10;
+  color: #ffffff;
 }
 
 .hidden-field {
