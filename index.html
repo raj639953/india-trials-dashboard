@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nightmare Clinical Analytics</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-nav">
+    <a class="brand" href="#top" aria-label="Nightmare Clinical Analytics home">
+      <span>NCA</span>
+      <strong>Nightmare Clinical Analytics</strong>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#intelligence">Intelligence</a>
+      <a href="#explorer">Explorer</a>
+      <a href="#directory">Directory</a>
+      <a href="#contact">Contact</a>
+      <a href="India_Clinical_Trials_Report.pdf">Report</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">ClinicalTrials.gov source-of-truth analysis</p>
+        <h1>Nightmare Clinical Analytics</h1>
+        <p class="hero-text">
+          India active clinical trials, structured for boardroom decisions. Therapeutic concentration,
+          phase maturity, sponsor landscape, site footprint, and contact readiness in one controlled intelligence layer.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#explorer">Open interactive explorer</a>
+          <a class="button secondary" href="India_Clinical_Trials_Report.pdf">Download PDF report</a>
+        </div>
+      </div>
+      <aside class="hero-panel" aria-label="Portfolio facts">
+        <div class="hero-stat">
+          <b id="heroTrials">767</b>
+          <span>active India trials</span>
+        </div>
+        <div class="hero-stat">
+          <b id="heroSites">3,630</b>
+          <span>India site records</span>
+        </div>
+        <div class="hero-stat">
+          <b id="heroContacts">3,939</b>
+          <span>contact records</span>
+        </div>
+        <div class="hero-note" id="sourceStrip"></div>
+      </aside>
+    </section>
+
+    <section class="section" id="intelligence">
+      <div class="section-heading">
+        <p class="eyebrow">Executive signal</p>
+        <h2>Portfolio shape at a glance</h2>
+      </div>
+      <div class="kpi-grid" id="kpis" aria-label="Portfolio summary"></div>
+      <div class="insights" id="insights"></div>
+    </section>
+
+    <section class="workspace" id="explorer">
+      <aside class="slicer-rail" aria-label="Dashboard filters">
+        <div class="rail-head">
+          <p class="eyebrow">Slicers</p>
+          <h2>Refine view</h2>
+        </div>
+        <label>
+          Search
+          <input id="searchInput" type="search" placeholder="NCT ID, sponsor, city, contact...">
+        </label>
+        <label>
+          Therapeutic area
+          <select id="areaFilter"></select>
+        </label>
+        <label>
+          Phase
+          <select id="phaseFilter"></select>
+        </label>
+        <label>
+          Status
+          <select id="statusFilter"></select>
+        </label>
+        <label>
+          State/region
+          <select id="stateFilter"></select>
+        </label>
+        <label>
+          Sponsor class
+          <select id="sponsorClassFilter"></select>
+        </label>
+        <button id="resetFilters" type="button">Reset all filters</button>
+        <div class="active-filters" id="activeFilters"></div>
+      </aside>
+
+      <section class="bi-canvas">
+        <div class="canvas-head">
+          <div>
+            <p class="eyebrow">Interactive intelligence</p>
+            <h2>India trial landscape explorer</h2>
+          </div>
+          <div class="export-links">
+            <a href="India_Clinical_Trials_Report.html">HTML report</a>
+            <a href="data/trials.csv">Trials CSV</a>
+            <a href="data/india-sites.csv">Sites CSV</a>
+            <a href="data/contacts.csv">Contacts CSV</a>
+          </div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Dashboard views">
+          <button class="tab active" type="button" data-view="overview">Overview</button>
+          <button class="tab" type="button" data-view="geography">Geography</button>
+          <button class="tab" type="button" data-view="sponsors">Sponsors</button>
+          <button class="tab" type="button" data-view="matrix">Phase Matrix</button>
+          <button class="tab" type="button" data-view="contacts">Contacts</button>
+        </div>
+
+        <section class="view active" data-view-panel="overview">
+          <div class="dashboard-grid">
+            <article class="panel chart-panel">
+              <div class="panel-head">
+                <h3>Therapeutic Areas</h3>
+                <span id="areaChartTotal"></span>
+              </div>
+              <div class="chart-wrap">
+                <svg id="areaPie" viewBox="0 0 220 220" role="img" aria-label="Trials by therapeutic area"></svg>
+                <div id="areaLegend" class="legend"></div>
+              </div>
+            </article>
+
+            <article class="panel chart-panel">
+              <div class="panel-head">
+                <h3>Trial Phases</h3>
+                <span id="phaseChartTotal"></span>
+              </div>
+              <div class="chart-wrap">
+                <svg id="phasePie" viewBox="0 0 220 220" role="img" aria-label="Trials by phase"></svg>
+                <div id="phaseLegend" class="legend"></div>
+              </div>
+            </article>
+
+            <article class="panel chart-panel">
+              <div class="panel-head">
+                <h3>Recruitment Status</h3>
+                <span id="statusChartTotal"></span>
+              </div>
+              <div class="chart-wrap">
+                <svg id="statusPie" viewBox="0 0 220 220" role="img" aria-label="Trials by recruitment status"></svg>
+                <div id="statusLegend" class="legend"></div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Intervention Types</h3>
+                <span>multi-count</span>
+              </div>
+              <div id="interventionBars" class="bars"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="geography">
+          <div class="dashboard-grid two">
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Top State/Region Fields</h3>
+                <span>unique trials</span>
+              </div>
+              <div id="stateBars" class="bars"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Top Cities</h3>
+                <span>unique trials</span>
+              </div>
+              <div id="cityBars" class="bars"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="sponsors">
+          <div class="dashboard-grid two">
+            <article class="panel chart-panel">
+              <div class="panel-head">
+                <h3>Sponsor Class</h3>
+                <span id="sponsorChartTotal"></span>
+              </div>
+              <div class="chart-wrap">
+                <svg id="sponsorPie" viewBox="0 0 220 220" role="img" aria-label="Trials by sponsor class"></svg>
+                <div id="sponsorLegend" class="legend"></div>
+              </div>
+            </article>
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Top Lead Sponsors</h3>
+                <span>filtered trials</span>
+              </div>
+              <div id="sponsorBars" class="bars"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="matrix">
+          <article class="panel">
+            <div class="panel-head">
+              <h3>Therapeutic Area x Phase</h3>
+              <span>trial count matrix</span>
+            </div>
+            <div class="matrix-scroll" id="phaseMatrix"></div>
+          </article>
+        </section>
+
+        <section class="view" data-view-panel="contacts">
+          <div class="dashboard-grid two">
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Contact Readiness</h3>
+                <span>filtered trials</span>
+              </div>
+              <div id="contactBars" class="bars"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Site Contact Density</h3>
+                <span>top cities</span>
+              </div>
+              <div id="contactCityBars" class="bars"></div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </section>
+
+    <section class="section" id="directory">
+      <div class="panel table-panel">
+        <div class="panel-head table-head">
+          <div>
+            <p class="eyebrow">Trial directory</p>
+            <h2>Classified trial list</h2>
+            <span id="resultCount"></span>
+          </div>
+          <div class="table-tools">
+            <button id="prevPage" type="button">Prev</button>
+            <span id="pageLabel"></span>
+            <button id="nextPage" type="button">Next</button>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>NCT ID</th>
+                <th>Trial</th>
+                <th>Therapeutic Area</th>
+                <th>Phase</th>
+                <th>Status</th>
+                <th>Sponsor</th>
+                <th>India Sites</th>
+                <th>Contact</th>
+              </tr>
+            </thead>
+            <tbody id="trialRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <div class="contact-copy">
+        <p class="eyebrow">Get in touch</p>
+        <h2>Request a deeper India trials readout.</h2>
+        <p>
+          Share your role, organization, and the decision you are trying to make.
+          The backend records the inquiry and routes it server-side; the destination email is not exposed in the page.
+        </p>
+      </div>
+      <form class="contact-form" id="contactForm">
+        <input class="hidden-field" type="text" name="website" tabindex="-1" autocomplete="off">
+        <label>
+          Name
+          <input name="name" type="text" autocomplete="name" required>
+        </label>
+        <label>
+          Work email
+          <input name="email" type="email" autocomplete="email" required>
+        </label>
+        <label>
+          Organization
+          <input name="organization" type="text" autocomplete="organization">
+        </label>
+        <label>
+          Role
+          <input name="role" type="text" autocomplete="organization-title">
+        </label>
+        <label>
+          Area of interest
+          <select name="interest">
+            <option value="India clinical trials landscape">India clinical trials landscape</option>
+            <option value="Sponsor and site analysis">Sponsor and site analysis</option>
+            <option value="Therapeutic area deep dive">Therapeutic area deep dive</option>
+            <option value="Partnership or BD screening">Partnership or BD screening</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+        <label class="full">
+          Message
+          <textarea name="message" rows="5" required placeholder="Tell us what decision this analysis needs to support."></textarea>
+        </label>
+        <button type="submit">Send inquiry</button>
+        <p class="form-status" id="contactStatus" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-backdrop" data-close></div>
+    <article class="drawer-panel">
+      <button class="drawer-close" type="button" data-close>Close</button>
+      <div id="drawerContent"></div>
+    </article>
+  </aside>
+
+  <script src="data/analysis-data.js"></script>
+  <script src="assets/dashboard.js"></script>
+</body>
+</html>
