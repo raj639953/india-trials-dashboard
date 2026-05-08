@@ -10,7 +10,7 @@ const SUBMISSIONS_FILE = path.join(DATA_DIR, "contact-submissions.jsonl");
 loadEnv(path.join(ROOT, ".env"));
 
 const PORT = Number(process.env.PORT || 4321);
-const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || "lethalinjection2004@gmail.com";
+const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || "raj639953@gmail.com";
 const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || "Nightmare Clinical Analytics <onboarding@resend.dev>";
 const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
 
